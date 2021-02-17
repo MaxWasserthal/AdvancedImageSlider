@@ -1,0 +1,18 @@
+{
+  "name": "zora/advanced-slider",
+  "description": "Advanced Image Slider",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Zora\\AdvancedSlider\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Zora\\AdvancedSlider\\AdvancedSlider",
+    "label": {
+      "de-DE": "Erweiterter Bilder-Slider",
+      "en-GB": "Advanced image-slider"
+    }
+  }
+}

@@ -1,0 +1,196 @@
+{% block sw_cms_element_advancedslider_config %}
+    <div class="sw-cms-el-config-advancedslider">
+        {% block sw_cms_element_advancedslider_config_tabs %}
+            <sw-tabs class="sw-cms-el-config-advancedslider__tabs" defaultItem="content">
+                <template slot-scope="{ active }" >
+                    {% block sw_cms_element_advancedslider_config_tab_content %}
+                        <sw-tabs-item title="Content" name="content" :activeTab="active">
+                            Inhalt
+                        </sw-tabs-item>
+                    {% endblock %}
+                    {% block sw_cms_element_advancedslider_config_tab_options %}
+                        <sw-tabs-item title="Settings" name="settings" :activeTab="active">
+                            Einstellungen
+                        </sw-tabs-item>
+                    {% endblock %}
+                </template>
+
+                <template slot="content" slot-scope="{ active }">
+                    {% block sw_cms_element_advancedslider_config_content %}
+                        <sw-container v-if="active === 'content'" class="sw-cms-el-config-advancedslider__tab-content">
+                            {% block sw_cms_element_advancedslider_config_media_selection %}
+                                <sw-media-list-selection-v2
+                                        :entityMediaItems="mediaItems"
+                                        :entity="entity"
+                                        :uploadTag="uploadTag"
+                                        :defaultFolderName="defaultFolderName"
+                                        @upload-finish="onImageUpload"
+                                        @item-remove="onItemRemove"
+                                        @open-sidebar="onOpenMediaModal">
+                                </sw-media-list-selection-v2>
+                            {% endblock %}
+
+                            {% block sw_cms_element_advancedslider_config_media_modal %}
+                                <sw-media-modal-v2
+                                        variant="regular"
+                                        v-if="mediaModalIsOpen"
+                                        caption="Upload"
+                                        :entityContext="cmsPageState.entityName"
+                                        :initialFolderId="cmsPageState.defaultMediaFolderId"
+                                        @media-upload-remove-image="onItemRemove"
+                                        @media-modal-selection-change="onMediaSelectionChange"
+                                        @modal-close="onCloseMediaModal">
+                                </sw-media-modal-v2>
+                            {% endblock %}
+                        </sw-container>
+                    {% endblock %}
+
+                    {% block sw_cms_element_advancedslider_config_settings %}
+                        <sw-container v-if="active === 'settings'" class="sw-cms-el-config-advancedslider__tab-settings">
+                            <div class="sw-cms-el-config-advancedslider__settings-options">
+
+                                {% block sw_cms_element_image_gallery_config_settings_display_mode %}
+                                    <div class="sw-cms-el-config-advancedslider__setting-option">
+
+                                        {% block sw_cms_element_image_gallery_config_settings_display_mode_select %}
+                                            <sw-select-field label="Display Modus"
+                                                             v-model="element.config.displayMode.value"
+                                                             @change="onChangeDisplayMode"
+                                                             class="sw-cms-el-config-advancedslider__setting-display-mode">
+                                                <option value="standard">Standard</option>
+                                                <option value="cover">Cover</option>
+                                                <option value="contain">Contain</option>
+                                            </sw-select-field>
+                                        {% endblock %}
+
+                                        {% block sw_cms_element_image_gallery_config_settings_min_height %}
+                                            <sw-text-field label="Minimale Höhe"
+                                                           placeholder="500px"
+                                                           :disabled="element.config.displayMode.value !== 'cover'"
+                                                           v-model="element.config.minHeight.value"
+                                                           @input="onChangeMinHeight">
+                                            </sw-text-field>
+                                        {% endblock %}
+
+                                        {% block sw_cms_element_image_gallery_config_settings_vertical_align %}
+                                            <sw-select-field label="Vertical Align"
+                                                             v-model="element.config.verticalAlign.value"
+                                                             placeholder="Vertical Align"
+                                                             :disabled="element.config.displayMode.value === 'cover'">
+                                                <option value="flex-start">Oben</option>
+                                                <option value="center">Mitte</option>
+                                                <option value="flex-end">Unten</option>
+                                            </sw-select-field>
+                                        {% endblock %}
+                                    </div>
+                                {% endblock %}
+
+
+                                {% block sw_cms_element_advancedslider_config_settings_navigation %}
+                                    <div class="sw-cms-el-config-advancedslider__setting-navigations sw-cms-el-config-advancedslider__setting-option">
+                                        <div class="sw-cms-el-config-advancedslider__settings-navigation">
+
+                                            {% block sw_cms_element_advancedslider_config_settings_navigation_arrow_position %}
+                                                <sw-field type="select"
+                                                          v-model="element.config.navigationArrows.value"
+                                                          @change="emitUpdateEl"
+                                                          label="Navigationspfeile">
+
+                                                    <option :value="null">
+                                                        Keine
+                                                    </option>
+                                                    <option value="inside">
+                                                        Innen
+                                                    </option>
+                                                    <option value="outside">
+                                                        Außen
+                                                    </option>
+                                                </sw-field>
+                                            {% endblock %}
+                                        </div>
+
+                                        <div class="sw-cms-el-config-image-slider__settings-navigation">
+
+                                            {% block sw_cms_element_advancedslider_config_settings_navigation_dots_position %}
+                                                <sw-field type="select"
+                                                          v-model="element.config.navigationDots.value"
+                                                          @change="emitUpdateEl"
+                                                          label="Navigationspunkte">
+
+                                                    <option :value="null">
+                                                        Keine
+                                                    </option>
+                                                    <option value="inside">
+                                                        Innen
+                                                    </option>
+                                                    <option value="outside">
+                                                        Außen
+                                                    </option>
+                                                </sw-field>
+                                            {% endblock %}
+                                        </div>
+                                    </div>
+                                {% endblock %}
+
+                                {% block sw_cms_element_advancedslider_config_settings_links %}
+                                    <div class="sw-cms-el-config-advancedslider__settings-links sw-cms-el-config-advancedslider__setting-option">
+                                        <div class="sw-cms-el-config-advancedslider__settings-link"
+                                             v-for="sliderItem in items">
+
+                                            {% block sw_cms_element_advancedslider_config_settings_link_url %}
+                                                <sw-field v-model="sliderItem.url"
+                                                          class="sw-cms-el-config-advancedslider__settings-link-input"
+                                                          :key="sliderItem.mediaId"
+                                                          :name="sliderItem.mediaUrl"
+                                                          type="text"
+                                                          label="Button Link"
+                                                          placeholder="Button URL eingeben">
+                                                    <template #prefix>
+                                                        <img class="sw-cms-el-config-advancedslider__settings-link-prefix"
+                                                             :src="sliderItem.mediaUrl"
+                                                             v-if="sliderItem.mediaUrl">
+                                                    </template>
+                                                </sw-field>
+                                            {% endblock %}
+
+                                            {% block sw_cms_element_advancedslider_config_settings_button_text %}
+                                                <sw-field v-model="sliderItem.btnText"
+                                                               class="sw-cms-el-config-advancedslider__setting-text-input"
+                                                               label="Button Text"
+                                                               type="text"
+                                                               placeholder="Button Text"
+                                                               :key="sliderItem.mediaId"
+                                                               :name="sliderItem.btnText">
+                                                </sw-field>
+                                            {% endblock %}
+
+                                            {% block sw_cms_element_advancedslider_config_settings_link_target %}
+                                                <sw-field class="sw-cms-el-config-advancedslider__settings-link-tab"
+                                                          v-model="sliderItem.newTab"
+                                                          type="switch"
+                                                          :name="sliderItem.mediaId"
+                                                          label="Neuer Tab">
+                                                </sw-field>
+                                            {% endblock %}
+
+                                            {% block sw_cms_element_advancedslider_config_settings_text %}
+                                                <sw-field v-model="sliderItem.sText"
+                                                               class="sw-cms-el-config-advancedslider__setting-text-input"
+                                                               label="Text"
+                                                               type="text"
+                                                               placeholder="Text"
+                                                               :key="sliderItem.mediaId"
+                                                               :name="sliderItem.sText">
+                                                </sw-field>
+                                            {% endblock %}
+                                        </div>
+                                    </div>
+                                {% endblock %}
+                            </div>
+                        </sw-container>
+                    {% endblock %}
+                </template>
+            </sw-tabs>
+        {% endblock %}
+    </div>
+{% endblock %}

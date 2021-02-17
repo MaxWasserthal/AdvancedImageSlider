@@ -1,0 +1,40 @@
+.sw-cms-el-config-advancedslider {
+    .sw-cms-el-config-advancedslider__setting-option {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+        gap: 0 32px;
+    }
+
+    .sw-cms-el-config-advancedslider__setting-display-mode {
+        grid-column: 1 / -1;
+    }
+
+    .sw-cms-el-config-advancedslider__settings-links {
+        .sw-cms-el-config-advancedslider__settings-link {
+            margin-top: 8px;
+
+            .sw-cms-el-config-advancedslider__settings-link-input {
+                margin-bottom: 8px;
+
+                .sw-field__addition {
+                    &.is--prefix {
+                        padding: 5px 0 5px 5px;
+                        background: initial;
+                        border-right: none;
+                    }
+                }
+            }
+
+            .sw-cms-el-config-advancedslider__settings-link-prefix {
+                height: 36px;
+                width: 44px;
+                border-radius: 2px;
+                object-fit: cover;
+            }
+        }
+    }
+
+    .sw-cms-el-config-advancedslider__setting-text-input {
+        margin-top: 8px;
+    }
+}

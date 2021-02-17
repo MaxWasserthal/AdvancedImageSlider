@@ -1,0 +1,141 @@
+/*
+Image slider
+==============================================
+Styling for image slider component.
+Displays images in a reusable slider component.
+based on "base-slider" component and "tiny-slider" (https://github.com/ganlanyuan/tiny-slider)
+*/
+
+.advancedslider-container {
+    position: relative;
+    height: 100%;
+
+    .advancedslider-image {
+        display: block;
+        width: 100%;
+    }
+
+    .advancedslider-item {
+        display: grid;
+        max-width: 100%;
+        position: relative;
+
+        &.is-not-first {
+            display: none;
+        }
+
+        &.is-cover {
+            height: 100%;
+
+            .advancedslider-image {
+                object-fit: cover;
+                font-family: 'object-fit: cover;'; // IE polyfill
+                height: 100%;
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+            }
+        }
+    }
+
+    .advancedslider-link {
+        display: block;
+    }
+
+    .advancedslider-sText-wrapper {
+        z-index: 1;
+        text-align: center;
+        height: min-content;
+        position: relative;
+
+        h1 {
+            font-size: 3.7rem;
+            text-transform: uppercase;
+        }
+        
+        .advancedslider-sText {
+            padding-top: 3.5em;
+            position: absolute;
+            color: #fff;
+            width: 100%;
+        }
+    }
+
+    .cms-advancedslider-btn-wrapper {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 13em;
+        width: 100%;
+        height: min-content;
+
+        .cms-advancedslider-btn-wrapper-outer {
+            float: right;
+            right: 50%;
+            position: relative;
+
+            .cms-advancedslider-btn {
+                margin-top: 15em;
+                float: right;
+                right: -50%;
+                position: relative;
+                padding: 2px 50px;
+                background-color: transparent;
+                border-color: #fff;
+                border-width: 1px;
+                font-size: .875rem;
+                transition: all ease .2s;
+
+                &:hover {
+                    background-color: #fff;
+                    color: #777;
+                    border: 1px solid #777;
+                }
+            }
+        }
+    }
+}
+
+.js-slider-initialized .advancedslider-item.is-not-first {
+    display: block;
+}
+
+.advancedslider-controls-prev {
+    &.is-nav-prev-inside {
+        left: 0;
+    }
+
+    &.is-nav-prev-outside {
+        left: -15px;
+    }
+}
+
+.advancedslider-controls-next {
+
+    .icon > svg use {
+        fill: #000;
+    }
+
+    &.is-nav-next-inside {
+        right: 0;
+    }
+
+    &.is-nav-next-outside {
+        right: -15px;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .advancedslider-controls-prev {
+        &.is-nav-prev-outside {
+            left: -5px;
+        }
+    }
+
+    .advancedslider-controls-next {
+        &.is-nav-next-outside {
+            right: -5px;
+        }
+    }
+}

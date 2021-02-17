@@ -1,0 +1,102 @@
+{% block element_advancedslider %}
+    {%  set sliderConfig = element.fieldConfig.elements %}
+    
+    <div class="cms-element-{{ element.type }}{% if sliderConfig.displayMode.value == "standard" and sliderConfig.verticalAlign.value %} has-vertical-alignment{% endif %}">
+        {% set baseSliderOptions = {
+            slider: {
+                navPosition: 'bottom',
+                speed: 500,
+                nav: sliderConfig.navigationDots.value ? true : false,
+                controls: sliderConfig.navigationArrows.value ? true : false,
+                autoHeight: (sliderConfig.displayMode.value == "standard") ? true : false
+            }
+        } %}
+
+        {% block element_advancedslider_alignment %}
+            {% if config.verticalAlign.value %}
+                <div class="cms-element-alignment{% if sliderConfig.verticalAlign.value == "center" %} align-self-center{% elseif sliderConfig.verticalAlign.value == "flex-end" %} align-self-end{% else %} align-self-start{% endif %}">
+            {%  endif %}
+                <div class="base-slider advancedslider{% if sliderConfig.navigationArrows.value == "outside" %} has-nav-outside{% endif %}{% if sliderConfig.navigationDots.value == "outside" %} has-dots-outside{% endif %}"
+                     data-base-slider="true"
+                     data-base-slider-options='{{ baseSliderOptions|json_encode }}'>
+
+                    {% block element_advancedslider_inner %}
+                        <div class="advancedslider-container"
+                             data-base-slider-container="true">
+                            {% for image in element.data.sliderItems %}
+
+                                {% set imageElement %}
+                                    <div class="advancedslider-item{% if loop.first != true %} is-not-first{% endif %} is-{{ sliderConfig.displayMode.value }}"{% if sliderConfig.minHeight.value and  sliderConfig.displayMode.value == "cover" %} style="min-height: {{ sliderConfig.minHeight.value }}"{% endif %}>
+                                        <div class="advancedslider-sText-wrapper">
+                                            <h1 class="advancedslider-sText">{{ image.sText }}</h1>
+                                        </div>
+                                        {% set attributes = {
+                                            'class': 'img-fluid advancedslider-image',
+                                            'alt': (image.media.translated.alt ?: ''),
+                                            'title': (image.media.translated.title ?: '')
+                                        } %}
+
+                                        {% if element.config.displayMode.value == 'cover' or element.config.displayMode.value == 'contain' %}
+                                            {% set attributes = attributes|merge({ 'data-object-fit': element.config.displayMode.value }) %}
+                                        {% endif %}
+
+                                        {% sw_thumbnails 'cms-advancedslider-thumbnails' with {
+                                            media: image.media
+                                        } %}
+                                        {% if image.url %}
+                                            <div class="cms-advancedslider-btn-wrapper">
+                                                <div class="cms-advancedslider-btn-wrapper-outer">
+                                                    <a href="{{ image.url }}"
+                                                    class="btn btn-primary cms-advancedslider-btn"
+                                                    role="button">
+                                                    {% if image.btnText %}
+                                                        {{ image.btnText }}
+                                                    {% else %}
+                                                        Explore
+                                                    {% endif %}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endset %}
+
+                                {% block element_advancedslider_inner_item %}
+                                    <div class="advancedslider-item-container">
+                                        {{ imageElement }}
+                                    </div>
+                                {% endblock %}
+                            {% endfor %}
+                        </div>
+
+                        {% block element_advancedslider_controls %}
+                            {% if sliderConfig.navigationArrows.value %}
+                                <div class="advancedslider-controls-container">
+                                    <div class="base-slider-controls"
+                                        data-base-slider-controls="true">
+                                        {% block element_advancedslider_controls_items %}
+                                            {% block element_advancedslider_controls_items_arrows %}
+                                                <button class="base-slider-controls-prev advancedslider-controls-prev{% if sliderConfig.navigationArrows.value == "outside" %} is-nav-prev-outside{% elseif sliderConfig.navigationArrows.value == "inside" %} is-nav-prev-inside{% endif %}">
+                                                    {% block element_advancedslider_controls_items_prev_icon %}
+                                                        {% sw_icon 'arrow-head-left' %}
+                                                    {% endblock %}
+                                                </button>
+                                                <button class="base-slider-controls-next advancedslider-controls-next{% if sliderConfig.navigationArrows.value == "outside" %} is-nav-next-outside{% elseif sliderConfig.navigationArrows.value == "inside" %} is-nav-next-inside{% endif %}">
+                                                    {% block element_advancedslider_controls_items_next_icon %}
+                                                        {% sw_icon 'arrow-head-right' %}
+                                                    {% endblock %}
+                                                </button>
+                                            {% endblock %}
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endblock %}
+                    {% endblock %}
+                </div>
+            {% if config.verticalAlign.value %}
+                </div>
+            {% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}

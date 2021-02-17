@@ -1,0 +1,69 @@
+{% block sw_cms_element_advancedslider %}
+    <div class="sw-cms-el-advancedslider" :class="outsideNavArrows" :style="verticalAlignStyle">
+        {% block sw_cms_element_advancedslider_img %}
+            <div class="sw-cms-el-advancedslider__image-box" :class="displayModeClass" :style="styles">
+                <img class="sw-cms-el-advancedslider__image" :src="imgSrc">
+            </div>
+        {% endblock %}
+
+        <template v-if="element.data !== null">
+            {% block sw_cms_element_advancedslider_nav %}
+                <div class="sw-cms-el-advancedslider__navigation">
+                    {% block sw_cms_element_advancedslider_nav_dots %}
+                        <div v-if="element.config.navigationDots.value !== null"
+                             class="sw-cms-el-advancedslider__navigation-dots"
+                             :class="`is--nav-${element.config.navigationDots.value}`">
+                            <div class="sw-cms-el-advancedslider__navigation-buttons">
+                                <template v-if="sliderItems.length > 0">
+                                    <div v-for="(sliderItem, index) in sliderItems"
+                                         :class="activeButtonClass(sliderItem.media.url)"
+                                         @click="setSliderItem(sliderItem.media, index)"
+                                         class="sw-cms-el-advancedslider__navigation-button">
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <div class="sw-cms-el-advancedslider__navigation-button is--active"></div>
+                                    <div class="sw-cms-el-advancedslider__navigation-button"></div>
+                                    <div class="sw-cms-el-advancedslider__navigation-button"></div>
+                                </template>
+                            </div>
+                        </div>
+                    {% endblock %}
+                    {% block sw_cms_element_advancedslider_nav_arrows %}
+                        <div v-if="element.config.navigationArrows.value !== null"
+                             class="sw-cms-el-advancedslider__navigation-arrows"
+                             :class="`is--nav-${element.config.navigationArrows.value}`">
+                            <sw-icon @click="setSliderArrowItem(-1)"
+                                     class="sw-cms-el-advancedslider__navigation-button"
+                                     name="default-arrow-head-left"
+                                     size="24">
+                            </sw-icon>
+                            <sw-icon @click="setSliderArrowItem()"
+                                     class="sw-cms-el-advancedslider__navigation-button"
+                                     name="default-arrow-head-right"
+                                     size="24">
+                            </sw-icon>
+                        </div>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </template>
+
+        <template v-else>
+            {% block sw_cms_element_advancedslider_nav_default %}
+                <div class="sw-cms-el-advancedslider__navigation">
+                    <div class="sw-cms-el-advancedslider__navigation-arrows is--nav-outside">
+                        <sw-icon class="sw-cms-el-advancedslider__navigation-button"
+                                 name="default-arrow-head-left"
+                                 size="24">
+                        </sw-icon>
+                        <sw-icon class="sw-cms-el-advancedslider__navigation-button"
+                                 name="default-arrow-head-right"
+                                 size="24">
+                        </sw-icon>
+                    </div>
+                </div>
+            {% endblock %}
+        </template>
+    </div>
+{% endblock %}
